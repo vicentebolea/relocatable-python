@@ -25,7 +25,7 @@ import sys
 def ensure_pip(framework_path, version):
     """Ensure pip is installed in our Python framework"""
     python_path = os.path.join(
-        framework_path, "Versions", version, "bin/python" + version
+        framework_path, "Versions", version, "bin/python" + version + "t"
     )
     if not os.path.exists(python_path):
         print("No python at %s" % python_path, file=sys.stderr)
@@ -38,7 +38,7 @@ def ensure_pip(framework_path, version):
 def install(pkgname, framework_path, version):
     """Use pip to install a Python pkg into framework_path"""
     python_path = os.path.join(
-        framework_path, "Versions", version, "bin/python" + version
+        framework_path, "Versions", version, "bin/python" + version + "t"
     )
     if not os.path.exists(python_path):
         print("No python at %s" % python_path, file=sys.stderr)
@@ -51,7 +51,7 @@ def install(pkgname, framework_path, version):
 def upgrade_pip_install(framework_path, version):
     """Use pip to upgrade pip"""
     python_path = os.path.join(
-        framework_path, "Versions", version, "bin/python" + version
+        framework_path, "Versions", version, "bin/python" + version + "t"
     )
     if not os.path.exists(python_path):
         print("No python at %s" % python_path, file=sys.stderr)
@@ -64,10 +64,10 @@ def upgrade_pip_install(framework_path, version):
 def install_requirements(requirements_file, framework_path, version):
     """Use pip to install a Python pkg into framework_path"""
     python_path = os.path.join(
-        framework_path, "Versions", version, "bin/python" + version
+        framework_path, "Versions", version, "bin/python" + version + "t"
     )
     headers_path = os.path.abspath(os.path.join(
-        framework_path, "Versions", version, "include/python" + version
+        framework_path, "Versions", version, "include/python" + version + "t"
     ))
     if not os.path.exists(python_path):
         print("No python at %s" % python_path, file=sys.stderr)
