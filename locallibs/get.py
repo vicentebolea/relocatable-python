@@ -26,7 +26,7 @@ import tempfile
 CURL = "/usr/bin/curl"
 DITTO = "/usr/bin/ditto"
 PKGUTIL = "/usr/sbin/pkgutil"
-DEFAULT_BASEURL = "https://www.python.org/ftp/python/%s/python-%s-macosx%s.pkg"
+DEFAULT_BASEURL = "https://www.python.org/ftp/python/%s/python-%st-macosx%s.pkg"
 DEFAULT_PYTHON_VERSION = "2.7.15"
 DEFAULT_OS_VERSION = "10.9"
 
@@ -91,7 +91,7 @@ class FrameworkGetter(object):
     def extract_framework(self):
         """Extracts the Python framework from the expanded pkg"""
         payload = os.path.join(
-            self.expanded_path, "Python_Framework.pkg/Payload"
+            self.expanded_path, "PythonT_Framework.pkg/Payload"
         )
         cmd = [DITTO, "-xz", payload, self.destination]
         print("Extracting %s to %s..." % (payload, self.destination))
