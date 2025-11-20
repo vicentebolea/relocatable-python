@@ -78,23 +78,29 @@ def main():
         action="store_true",
         help="Do not install pip."
     )
+    parser.add_option(
+        "--free-threading",
+        default=False,
+        action="store_true",
+        help="Use free-threading Python build (adds 't' suffix to version)."
+    )
     parser.set_defaults(unsign=True)
     options, _arguments = parser.parse_args()
     framework_path = get.FrameworkGetter(
         python_version=options.python_version,
         os_version=options.os_version,
         base_url=options.baseurl,
+        free_threading=options.free_threading,
     ).download_and_extract(destination=options.destination)
 
     if framework_path:
         files_relocatablized = relocatablize(framework_path)
         if options.unsign:
             fix_broken_signatures(files_relocatablized)
-        # Extract major.minor version, preserving 't' suffix for free-threading
+        # Extract major.minor version, adding 't' suffix for free-threading
         version_parts = options.python_version.split(".")
         short_version = ".".join(version_parts[0:2])
-        # If the last part ends with 't', append it to short_version
-        if version_parts[-1].endswith('t') and not short_version.endswith('t'):
+        if options.free_threading:
             short_version += 't'
         install_extras(
             framework_path,
