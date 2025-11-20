@@ -90,9 +90,12 @@ class FrameworkGetter(object):
 
     def extract_framework(self):
         """Extracts the Python framework from the expanded pkg"""
-        payload = os.path.join(
-            self.expanded_path, "PythonT_Framework.pkg/Payload"
-        )
+        # Check if this is a free-threading build (version ends with 't')
+        if self.python_version.rstrip('0123456789.').endswith('t'):
+            pkg_name = "PythonT_Framework.pkg/Payload"
+        else:
+            pkg_name = "Python_Framework.pkg/Payload"
+        payload = os.path.join(self.expanded_path, pkg_name)
         cmd = [DITTO, "-xz", payload, self.destination]
         print("Extracting %s to %s..." % (payload, self.destination))
         subprocess.check_call(cmd)

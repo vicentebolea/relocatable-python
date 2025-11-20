@@ -90,7 +90,12 @@ def main():
         files_relocatablized = relocatablize(framework_path)
         if options.unsign:
             fix_broken_signatures(files_relocatablized)
-        short_version = ".".join(options.python_version.split(".")[0:2])
+        # Extract major.minor version, preserving 't' suffix for free-threading
+        version_parts = options.python_version.split(".")
+        short_version = ".".join(version_parts[0:2])
+        # If the last part ends with 't', append it to short_version
+        if version_parts[-1].endswith('t') and not short_version.endswith('t'):
+            short_version += 't'
         install_extras(
             framework_path,
             version=short_version,
