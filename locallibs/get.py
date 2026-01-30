@@ -42,10 +42,12 @@ class FrameworkGetter(object):
         python_version=DEFAULT_PYTHON_VERSION,
         os_version=DEFAULT_OS_VERSION,
         base_url=DEFAULT_BASEURL,
+        free_threading=False,
     ):
         self.python_version = python_version
         self.os_version = os_version
         self.base_url = base_url
+        self.free_threading = free_threading
         self.destination = ""
 
     def __del__(self):
@@ -63,9 +65,11 @@ class FrameworkGetter(object):
             base_url = self.base_url.replace('macosx', 'macos')
         else:
             base_url = self.base_url
+        # Add 't' suffix for free-threading builds
+        version_for_url = self.python_version + 't' if self.free_threading else self.python_version
         url = base_url % (
             self.python_version,
-            self.python_version,
+            version_for_url,
             self.os_version,
         )
         (file_handle, destination_path) = tempfile.mkstemp()
@@ -90,9 +94,12 @@ class FrameworkGetter(object):
 
     def extract_framework(self):
         """Extracts the Python framework from the expanded pkg"""
-        payload = os.path.join(
-            self.expanded_path, "Python_Framework.pkg/Payload"
-        )
+        # Use PythonT_Framework for free-threading builds
+        if self.free_threading:
+            pkg_name = "PythonT_Framework.pkg/Payload"
+        else:
+            pkg_name = "Python_Framework.pkg/Payload"
+        payload = os.path.join(self.expanded_path, pkg_name)
         cmd = [DITTO, "-xz", payload, self.destination]
         print("Extracting %s to %s..." % (payload, self.destination))
         subprocess.check_call(cmd)
